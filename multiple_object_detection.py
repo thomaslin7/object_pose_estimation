@@ -24,9 +24,8 @@ def display_image(img):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-
     # Image filename
-    image_name = 'image5.png'  # Change this to an image filename in this directory
+    image_name = 'multiple_objects.png'  # Change this to an image filename in this directory
     img = detect_image(image_name)
 
     # Convert the image to grayscale
@@ -119,4 +118,3 @@ if __name__ == "__main__":
     
     # Display the image
     display_image(img)
-
