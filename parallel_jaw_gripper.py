@@ -25,7 +25,7 @@ def display_image(img):
 
 if __name__ == "__main__":
     # Image filename
-    image_name = 'image2.png'  # Change this to an image filename in this directory
+    image_name = 'dataset/level1/level1_1.png'  # Change this to the correct image filename
     img = detect_image(image_name)
 
     # Convert the image to grayscale
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         end_point = center + sign * principal_axes[1] * (principal_axes_lengths[1] + gripper_offset) - principal_axes[0] * half_gripper_length
         start_point = tuple(map(int, start_point))
         end_point = tuple(map(int, end_point))
-        cv2.line(img, start_point, end_point, (0, 165, 255), 2)
+        cv2.line(img, start_point, end_point, (128, 0, 128), 2)
 
     # Display the image
     display_image(img)
