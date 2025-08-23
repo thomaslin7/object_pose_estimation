@@ -25,7 +25,7 @@ def display_image(img):
 
 if __name__ == "__main__":
     # Image filename
-    image_name = 'dataset/level1/level1_2.png'  # Change this to the correct image filename
+    image_name = 'dataset/level1/afa_mix.png'  # Change this to the correct image filename
     img = detect_image(image_name)
 
     # Convert the image to grayscale
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # _, binary = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY_INV) # second argument is the threshold value
 
     # Apply binary range thresholding
-    binary = cv2.inRange(gray_img, 30, 200)
+    binary = cv2.inRange(gray_img, 10, 245)
 
     # Apply inverse binary range thresholding
     # binary = cv2.inRange(gray_img, 0, 100) | cv2.inRange(gray_img, 200, 255)

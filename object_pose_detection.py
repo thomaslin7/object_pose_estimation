@@ -25,7 +25,7 @@ def display_image(img):
 
 if __name__ == "__main__":
     # Image filename
-    image_name = 'dataset/level1/level1_1.png'  # Change this to the correct image filename
+    image_name = 'dataset/level1/sanity_check.png'  # Change this to the correct image filename
     img = detect_image(image_name)
 
     # Convert the image to grayscale
