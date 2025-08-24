@@ -44,20 +44,9 @@ if __name__ == "__main__":
     # Convert to HSV color space
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # # Display the HSV image
-    # display_image(hsv_img)
-
-    # # Display hue, saturation, and value channels separately
-    # hue, saturation, value = cv2.split(hsv_img)
-    # display_image(hue)
-    # display_image(saturation)
-    # display_image(value)
-
     # Define HSV range for object detection, change threshold values based on different images with different HSV values
-    lower_hsv = np.array([0, 0, 150])  # Lower HSV threshold # parameters for image 8, low saturation and high brightness to capture white objects
-    upper_hsv = np.array([180, 50, 255])  # Upper HSV threshold # parameters for image 8
-    # lower_hsv = np.array([70, 100, 100])  # Lower HSV threshold # parameters for image 4, color range to capture only blue and green objects and neglect others
-    # upper_hsv = np.array([150, 255, 255])  # Upper HSV threshold # parameters for image 4
+    lower_hsv = np.array([0, 0, 150])  # Lower HSV threshold # parameters for image level2_9, low saturation and high brightness to capture white objects
+    upper_hsv = np.array([180, 50, 255])  # Upper HSV threshold # parameters for image level2_9
 
     # Create binary mask from HSV thresholds
     binary = cv2.inRange(hsv_img, lower_hsv, upper_hsv)
