@@ -99,9 +99,6 @@ if __name__ == "__main__":
         principal_axes = pca.components_ # get eigenvectors
         eigenvalues = pca.explained_variance_ # get eigenvalues
 
-        # Visualize the center point
-        cv2.circle(img, tuple(map(int, center)), 5, (255, 0, 0), -1)  # blue dot at center
-
         # Find lengths of two principal axes, from center of object to its contour
         principal_axes_lengths = []
         for axis in principal_axes:
@@ -121,6 +118,9 @@ if __name__ == "__main__":
             end_point = center + axis * principal_axes_lengths[i]
             end_point = tuple(map(int, end_point))
             cv2.line(img, tuple(map(int, center)), end_point, colors[i], 2) # image / start point / end point / color / thickness
+
+        # Visualize the center point
+        cv2.circle(img, tuple(map(int, center)), 5, (255, 0, 0), -1)  # blue dot at center
 
         # # Visualize the parallel jaw gripper, draw two parallel lines along the second eigenvector
         # gripper_offset = 30 # distance from object contour to the gripper along the second principal axis (short)
