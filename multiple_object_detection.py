@@ -25,18 +25,24 @@ def display_image(img):
 
 if __name__ == "__main__":
     # Image filename
-    image_name = 'dataset/level1/afa_mix.png'  # Change this to the correct image filename
+    image_name = 'dataset/level1/level1_1.png'  # Change this to the correct image filename
     img = detect_image(image_name)
+
+    # Display the original image
+    display_image(img)
 
     # Convert the image to grayscale
     if img is not None:
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Display the grayscale image
+    display_image(gray_img)
     
     # Apply inverse binary thresholding --> black and white
     # _, binary = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY_INV) # second argument is the threshold value
 
     # Apply binary range thresholding
-    binary = cv2.inRange(gray_img, 10, 245)
+    binary = cv2.inRange(gray_img, 140, 220)
 
     # Apply inverse binary range thresholding
     # binary = cv2.inRange(gray_img, 0, 100) | cv2.inRange(gray_img, 200, 255)
@@ -49,7 +55,7 @@ if __name__ == "__main__":
     print(f"Found {len(contours)} objects in the image")
 
     # Filter out small contours (noise)
-    min_contour_area = 200  # Adjust this threshold as needed
+    min_contour_area = 900  # Adjust this threshold as needed
     filtered_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > min_contour_area]
         # contours is the list of all detected contours in the image
         # cnt is one contour (a NumPy array of 2D points)
