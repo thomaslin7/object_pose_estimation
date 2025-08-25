@@ -108,7 +108,7 @@ Applies PCA to a single object and visualizes:
 
 **File**: `parallel_jaw_gripper.py`
 
-Extends single object PCA by adding parallel jaw gripper lines aligned with the object's shorter axis.
+“Extends single object PCA by adding parallel jaw gripper lines that grasp the object across its shorter axis.”
 
 **Applications**: Robotics grasping simulation.
 
@@ -174,11 +174,12 @@ Design a student-driven mini-project to apply object pose estimation in real-wor
 
 2. **Thresholding Experiments**
    - Try at least two thresholding methods per image.
-   - Save intermediate results (binary mask, contours) and final PCA visualization.
+   - Save intermediate results (binary mask, contours).
 
 3. **Pose Estimation with PCA**
    - Apply PCA and draw principal axes on each object.
    - For multi-object scenes, label each object (#1, #2, #3).
+   - Save final PCA visualization results.
 
 4. **Parameter Exploration**
    - Adjust thresholds and note how results change.
@@ -195,11 +196,11 @@ Design a student-driven mini-project to apply object pose estimation in real-wor
 ### Deliverables
 
 - `results/` folder containing:
-  - Binary masks and PCA visualizations for each chosen image
+  - Binary masks and PCA visualizations for each chosen image.
 - A short `HOMEWORK.md` with:
-  - Parameters used (threshold values, HSV ranges)
-  - 2–3 insights per experiment
-  - A reflection on what worked, what failed, and how you might improve it
+  - Parameters used (threshold values, HSV ranges).
+  - 2–3 insights per experiment.
+  - A reflection on what worked, what failed, and how you might improve it.
 
 ### Optional Extensions (if time permits)
 
