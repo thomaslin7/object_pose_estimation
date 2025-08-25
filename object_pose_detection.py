@@ -31,9 +31,12 @@ if __name__ == "__main__":
     # Convert the image to grayscale
     if img is not None:
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Apply binary thresholding --> black and white
+    # _, binary = cv2.threshold(gray_img, 50, 255, cv2.THRESH_BINARY) # second argument is the threshold value
     
-    # Apply inverse binary thresholding --> black and white
-    # _, binary = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY_INV) # second argument is the threshold value
+    # Apply inverse binary thresholding
+    # _, binary = cv2.threshold(gray_img, 200, 255, cv2.THRESH_BINARY_INV) # second argument is the threshold value
 
     # Apply binary range thresholding
     binary = cv2.inRange(gray_img, 30, 200)
