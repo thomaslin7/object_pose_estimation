@@ -50,7 +50,7 @@ Finally, the object's pose is visualized directly on the image with principal ax
 
 ```python
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-_, binary = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+_, binary = cv2.threshold(gray, 50, 255, cv2.THRESH_BINARY)
 ```
 
 **Example Use Case**: Detecting white objects on a black surface.
@@ -62,7 +62,7 @@ _, binary = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
 **Purpose**: Detect darker objects on bright backgrounds.
 
 ```python
-_, binary_inv = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
+_, binary_inv = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
 ```
 
 **Example Use Case**: Black tools on a white workbench.
@@ -74,7 +74,7 @@ _, binary_inv = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
 **Purpose**: Keep only pixel values within a range.
 
 ```python
-binary_range = cv2.inRange(gray, 30, 200)
+binary_range = cv2.inRange(gray, 50, 200)
 ```
 
 **Example Use Case**: Objects with medium brightness, while discarding very dark and very bright pixels.
