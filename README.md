@@ -1,238 +1,126 @@
-# Computer Vision Fundamentals: Object Detection & Pose Estimation
+# Object Pose Estimation: Thresholding and PCA
 
-A comprehensive collection of computer vision techniques for object detection, pose estimation, and robotic manipulation. This repository serves as an educational resource for understanding fundamental computer vision concepts, particularly image processing, color space analysis, and geometric object analysis.
+A comprehensive educational resource on object pose estimation using image thresholding and principal component analysis (PCA). This repository is designed as part of a computer vision course, guiding students from simple thresholding operations to full object pose visualization and grasp planning.
 
 ## 🎯 Learning Objectives
 
 This repository demonstrates:
-- **Image Thresholding**: Converting images to binary for object segmentation
-- **HSV Color Space**: Understanding hue, saturation, and value for color-based detection
-- **Object Detection**: Finding and analyzing multiple objects in images
-- **Pose Estimation**: Determining object orientation using Principal Component Analysis (PCA)
-- **Robotic Applications**: Visualizing gripper positioning for object manipulation
+- **Image Thresholding**: Techniques to separate objects from background (binary, inverse, range, HSV)
+- **HSV Color Space**: Understanding hue, saturation, and value for robust color-based segmentation
+- **Principal Component Analysis (PCA)**: Extracting object center and orientation from pixel data
+- **Pose Visualization**: Drawing principal axes and parallel jaw grippers on objects
+- **Scaling to Complexity**: Detecting single objects, multiple objects, and handling more challenging datasets
 
 ## 📚 Table of Contents
 
 1. [Fundamentals](#-fundamentals)
-2. [Core Techniques](#-core-techniques)
-   - [Image Thresholding](#image-thresholding)
+2. [Thresholding Techniques](#-thresholding-techniques)
+   - [Binary Thresholding](#binary-thresholding)
+   - [Inverse Binary Thresholding](#inverse-binary-thresholding)
+   - [Range Thresholding](#range-thresholding)
    - [HSV Color Space](#hsv-color-space)
-   - [Object Detection](#object-detection)
-   - [Pose Estimation](#pose-estimation)
-   - [Multiple Object Analysis](#multiple-object-analysis)
-   - [Robotic Gripper Visualization](#robotic-gripper-visualization)
-3. [Running the Examples](#-running-the-examples)
-4. [Educational Resources](#-educational-resources)
+3. [Pose Estimation with PCA](#-pose-estimation-with-pca)
+   - [Single Object Pose](#single-object-pose)
+   - [Parallel Jaw Gripper Visualization](#parallel-jaw-gripper-visualization)
+   - [Multiple Object Pose Estimation](#multiple-object-pose-estimation)
+4. [Running the Examples](#-running-the-examples)
+5. [Homework](#-homework)
 
 ## 🔬 Fundamentals
 
-### What is Computer Vision?
+### What is Object Pose Estimation?
 
-Computer vision is a field of artificial intelligence that enables computers to interpret and understand visual information from the world. This involves processing images to extract meaningful information such as object locations, orientations, and properties.
+Object pose estimation is the process of finding the position and orientation of an object in an image. This course uses a two-stage pipeline:
 
-### Key Concepts Covered
+1. **Image Processing (Thresholding)**
+   - Convert an image into a binary mask so the object can be isolated from the background.
 
-1. **Image Processing**: Converting and manipulating images for analysis
-2. **Color Spaces**: Understanding different ways to represent color information
-3. **Object Segmentation**: Separating objects from background
-4. **Geometric Analysis**: Understanding object shape and orientation
-5. **Robotic Applications**: Applying computer vision to robotic manipulation
+2. **Principal Component Analysis (PCA)**
+   - Apply PCA to the object pixels to compute its center and orientation.
 
-## 🎨 Core Techniques
+Finally, the object's pose is visualized directly on the image with principal axes, and in advanced scripts, parallel jaw grippers are drawn to simulate grasp planning.
 
-### Image Thresholding
+## 🎨 Thresholding Techniques
 
-**Purpose**: Converting grayscale images to binary (black and white) for object segmentation.
+### Binary Thresholding
 
-**Types of Thresholding**:
+**File**: Included in `object_pose_detection.py`
 
-1. **Binary Thresholding**: Simple threshold with two values
+**Purpose**: Separate bright objects from dark backgrounds using a single cutoff.
+
 ```python
-# Binary thresholding
-_, binary = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY)
-
-# Inverse binary thresholding
-_, binary = cv2.threshold(gray_img, 100, 255, cv2.THRESH_BINARY_INV)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+_, binary = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
 ```
 
-2. **Range Thresholding**: Thresholding within a specific range
-```python
-# Range thresholding
-binary = cv2.inRange(gray_img, 30, 200)
+**Example Use Case**: Detecting white objects on a black surface.
 
-# Inverse range thresholding
-binary = cv2.inRange(gray_img, 0, 100) | cv2.inRange(gray_img, 200, 255)
+### Inverse Binary Thresholding
+
+**File**: Included in `object_pose_detection.py`
+
+**Purpose**: Detect darker objects on bright backgrounds.
+
+```python
+_, binary_inv = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
 ```
 
-**Applications**:
-- Object segmentation
-- Background removal
-- Pre-processing for other operations
+**Example Use Case**: Black tools on a white workbench.
+
+### Range Thresholding
+
+**File**: Included in `object_pose_detection.py`
+
+**Purpose**: Keep only pixel values within a range.
+
+```python
+binary_range = cv2.inRange(gray, 30, 200)
+```
+
+**Example Use Case**: Objects with medium brightness, while discarding very dark and very bright pixels.
 
 ### HSV Color Space
 
 **File**: `HSV_color_space.py`
 
-**Purpose**: Using HSV (Hue, Saturation, Value) color space for more robust color-based object detection.
-
-**HSV Components**:
-- **Hue**: Color type (0-180 in OpenCV)
-- **Saturation**: Color intensity (0-255)
-- **Value**: Brightness (0-255)
+**Purpose**: Use hue, saturation, and value to filter objects based on color and brightness.
 
 ```python
-# Convert BGR to HSV
 hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-# Define HSV range for object detection
-lower_hsv = np.array([0, 0, 150])    # Lower threshold
-upper_hsv = np.array([180, 50, 255]) # Upper threshold
-
-# Create binary mask
+lower_hsv = np.array([0, 0, 150])
+upper_hsv = np.array([180, 50, 255])
 binary = cv2.inRange(hsv_img, lower_hsv, upper_hsv)
 ```
 
-**Advantages**:
-- More robust to lighting changes
-- Better color separation
-- Easier to define color ranges
+**Example Use Case**: Detecting white packages on a conveyor belt with controlled lighting.
 
-**Applications**:
-- Color-based object detection
-- Lighting-invariant segmentation
-- Multi-color object identification
+## 📐 Pose Estimation with PCA
 
-### Object Detection
-
-**Purpose**: Finding and analyzing objects in images using contour detection.
-
-**Process**:
-1. **Binary Image Creation**: Convert to black and white
-2. **Contour Detection**: Find object boundaries
-3. **Noise Filtering**: Remove small contours
-4. **Object Analysis**: Analyze each detected object
-
-```python
-# Find contours
-contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-
-# Filter small contours (noise)
-min_contour_area = 200
-filtered_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > min_contour_area]
-
-# Draw contours
-cv2.drawContours(img, filtered_contours, -1, (0, 255, 0), 2)
-```
-
-**Applications**:
-- Object counting
-- Quality control
-- Automated inspection
-
-### Pose Estimation
+### Single Object Pose
 
 **File**: `object_pose_detection.py`
 
-**Purpose**: Determining object orientation using Principal Component Analysis (PCA).
+Applies PCA to a single object and visualizes:
+- **Center** (blue dot)
+- **Principal axes** (red = dominant axis, green = perpendicular axis)
 
-**PCA Process**:
-1. **Point Extraction**: Get object points from binary image
-2. **PCA Analysis**: Find principal axes (eigenvectors)
-3. **Orientation Calculation**: Determine object orientation
-4. **Visualization**: Draw principal axes
-
-```python
-# Get object points
-points = np.column_stack(np.where(binary > 0))[:, ::-1]
-
-# Apply PCA
-pca = PCA(n_components=2)
-pca.fit(points)
-
-# Get center and principal axes
-center = np.mean(points, axis=0)
-principal_axes = pca.components_
-
-# Visualize
-cv2.circle(img, tuple(map(int, center)), 5, (255, 0, 0), -1)
-for i, axis in enumerate(principal_axes):
-    length = int(eigenvalues[i] * 0.2)
-    end_point = center + axis * length
-    cv2.line(img, tuple(map(int, center)), end_point, colors[i], 2)
-```
-
-**Applications**:
-- Robotic manipulation
-- Object alignment
-- Quality inspection
-
-### Multiple Object Analysis
-
-**File**: `multiple_object_detection.py`
-
-**Purpose**: Analyzing multiple objects simultaneously with individual pose estimation.
-
-**Process**:
-1. **Multi-Object Detection**: Find all objects in image
-2. **Individual Analysis**: Apply PCA to each object
-3. **Object Labeling**: Number and identify each object
-4. **Comprehensive Visualization**: Show all objects with their properties
-
-```python
-# Process each contour individually
-for contour in filtered_contours:
-    points = np.squeeze(contour)
-    
-    # Skip if insufficient points
-    if points.ndim == 1 or points.shape[0] < 3:
-        continue
-    
-    # Apply PCA to each object
-    pca = PCA(n_components=2)
-    pca.fit(points)
-    
-    # Calculate object properties
-    center = np.mean(points, axis=0)
-    principal_axes = pca.components_
-    
-    # Visualize each object
-    cv2.circle(img, tuple(map(int, center)), 5, (255, 0, 0), -1)
-    cv2.putText(img, f"#{count}", tuple(map(int, center + [10, 10])), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2)
-```
-
-**Applications**:
-- Multi-object sorting
-- Assembly line inspection
-- Robotic pick-and-place
-
-### Robotic Gripper Visualization
+### Parallel Jaw Gripper Visualization
 
 **File**: `parallel_jaw_gripper.py`
 
-**Purpose**: Visualizing how a parallel jaw gripper would approach and grasp objects.
+Extends single object PCA by adding parallel jaw gripper lines aligned with the object's shorter axis.
 
-**Gripper Design**:
-- **Parallel Jaws**: Two parallel lines for grasping
-- **Orientation-Based**: Aligned with object's principal axes
-- **Safety Offset**: Distance from object to prevent collision
+**Applications**: Robotics grasping simulation.
 
-```python
-# Calculate gripper position
-gripper_offset = 30  # Distance from object
-half_gripper_length = 100
+### Multiple Object Pose Estimation
 
-# Draw parallel gripper jaws
-for sign in [-1, 1]:  # Two parallel lines
-    start_point = center + sign * principal_axes[1] * (principal_axes_lengths[1] + gripper_offset) + principal_axes[0] * half_gripper_length
-    end_point = center + sign * principal_axes[1] * (principal_axes_lengths[1] + gripper_offset) - principal_axes[0] * half_gripper_length
-    cv2.line(img, start_point, end_point, (0, 165, 255), 2)
-```
+**File**: `multiple_object_detection.py`
 
-**Applications**:
-- Robotic manipulation planning
-- Grasp pose optimization
-- Industrial automation
+- Finds and filters multiple contours in an image.
+- Applies PCA to each object individually.
+- Visualizes axes, centers, and labels each object.
+
+**Applications**: Detecting multiple packages on a conveyor belt.
 
 ## 🚀 Running the Examples
 
@@ -242,50 +130,85 @@ for sign in [-1, 1]:  # Two parallel lines
 pip install opencv-python numpy matplotlib scikit-learn
 ```
 
+### Dataset
+
+The repository contains a `dataset/` folder with three difficulty levels:
+- `level1/` → Easiest images, includes `sanity_check.png` for testing.
+- `level2/` → Medium difficulty, more color/lighting variations.
+- `level3/` → Hardest cases, realistic backgrounds and noise.
+
+Each level contains 10 images.
+
 ### Execution
 
-Each technique can be run independently:
+Run each script independently:
 
 ```bash
-# Basic pose estimation
 python object_pose_detection.py
-
-# HSV color space analysis
-python HSV_color_space.py
-
-# Multiple object detection
-python multiple_object_detection.py
-
-# Robotic gripper visualization
 python parallel_jaw_gripper.py
+python multiple_object_detection.py
+python HSV_color_space.py
 ```
 
-### Expected Output
+Each script will display intermediate and final results in OpenCV windows.
 
-Each script will display:
-- **Original Image**: The input image
-- **Binary Image**: Thresholded result
-- **Analysis Results**: Object detection and pose estimation
-- **Visualization**: Annotated image with detected objects and orientations
+## 📝 Homework
 
-## 📖 Educational Resources
+Design a student-driven mini-project to apply object pose estimation in real-world scenarios. Aim to finish in about 60 minutes.
 
-### Key Concepts Covered
+### Instructions
 
-1. **Image Processing Pipeline**: From raw image to object analysis
-2. **Color Space Understanding**: BGR vs HSV representation
-3. **Mathematical Foundations**: PCA for orientation analysis
-4. **Robotic Applications**: Real-world computer vision applications
+- Use images from the provided `dataset/` (levels 1–3). Start with `level1/sanity_check.png`.
+- You are also encouraged to take your own photos to test robustness.
+- Experiment with different thresholding techniques: binary, inverse binary, range, and HSV.
+- Apply PCA to detected objects and visualize the results with principal axes and centers.
+- Work progressively:
+  - Start with level1 images (easy).
+  - Move to level2 and level3 to challenge yourself.
 
-### Practical Exercises
+### Tasks
 
-1. **Threshold Tuning**: Adjust threshold values for different images
-2. **HSV Range Experimentation**: Modify HSV ranges for different objects
-3. **Multi-Object Scenarios**: Test with images containing multiple objects
-4. **Gripper Parameter Adjustment**: Modify gripper dimensions and offsets
+1. **Problem Statement & Data**
+   - Pick 2–3 images from different levels (or your own).
+   - Write 2–3 sentences describing the challenge (e.g., lighting variation, noisy background, low contrast).
+
+2. **Thresholding Experiments**
+   - Try at least two thresholding methods per image.
+   - Save intermediate results (binary mask, contours) and final PCA visualization.
+
+3. **Pose Estimation with PCA**
+   - Apply PCA and draw principal axes on each object.
+   - For multi-object scenes, label each object (#1, #2, #3).
+
+4. **Parameter Exploration**
+   - Adjust thresholds and note how results change.
+   - Record both good and bad cases, and explain why.
+
+5. **Challenge Yourself**
+   - Try at least one image from level2 and one from level3.
+   - Reflect on what makes these harder (color, saturation, shadows, etc.).
+
+6. **Reflection & Solutions**
+   - Record challenges faced (e.g., noise, overlapping objects).
+   - Propose possible solutions (e.g., filtering, better lighting, controlled backgrounds).
+
+### Deliverables
+
+- `results/` folder containing:
+  - Binary masks and PCA visualizations for each chosen image
+- A short `HOMEWORK.md` with:
+  - Parameters used (threshold values, HSV ranges)
+  - 2–3 insights per experiment
+  - A reflection on what worked, what failed, and how you might improve it
+
+### Optional Extensions (if time permits)
+
+- Capture your own real-world images and run the pipeline.
+- Compare results on the same object under different lighting conditions.
+- Experiment with environment control (e.g., solid backgrounds) to simplify thresholding.
 
 ---
 
-**Happy Learning!** 🤖
+**Happy Learning!** 🎯
 
-*This repository serves as a foundation for understanding computer vision fundamentals in robotics and automation applications.*
+*This repository serves as a foundation for understanding object pose estimation in computer vision and robotics applications.*
